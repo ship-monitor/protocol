@@ -21,6 +21,55 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type ConnectionError int32
+
+const (
+	ConnectionError_CONNECTION_ERROR_UNKNOWN               ConnectionError = 0
+	ConnectionError_CONNECTION_ERROR_HUB_NOT_AUTHENTICATED ConnectionError = 1
+	ConnectionError_CONNECTION_ERROR_INTERNAL              ConnectionError = 2
+)
+
+// Enum value maps for ConnectionError.
+var (
+	ConnectionError_name = map[int32]string{
+		0: "CONNECTION_ERROR_UNKNOWN",
+		1: "CONNECTION_ERROR_HUB_NOT_AUTHENTICATED",
+		2: "CONNECTION_ERROR_INTERNAL",
+	}
+	ConnectionError_value = map[string]int32{
+		"CONNECTION_ERROR_UNKNOWN":               0,
+		"CONNECTION_ERROR_HUB_NOT_AUTHENTICATED": 1,
+		"CONNECTION_ERROR_INTERNAL":              2,
+	}
+)
+
+func (x ConnectionError) Enum() *ConnectionError {
+	p := new(ConnectionError)
+	*p = x
+	return p
+}
+
+func (x ConnectionError) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ConnectionError) Descriptor() protoreflect.EnumDescriptor {
+	return file_connection_v1_connected_devices_proto_enumTypes[0].Descriptor()
+}
+
+func (ConnectionError) Type() protoreflect.EnumType {
+	return &file_connection_v1_connected_devices_proto_enumTypes[0]
+}
+
+func (x ConnectionError) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ConnectionError.Descriptor instead.
+func (ConnectionError) EnumDescriptor() ([]byte, []int) {
+	return file_connection_v1_connected_devices_proto_rawDescGZIP(), []int{0}
+}
+
 type ConnectDeviceRequest struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
 	DeviceId string                 `protobuf:"bytes,1,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
@@ -78,6 +127,7 @@ func (x *ConnectDeviceRequest) GetDeviceKey() string {
 type ConnectDeviceResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Approved      bool                   `protobuf:"varint,1,opt,name=approved,proto3" json:"approved,omitempty"`
+	Error         *ConnectionError       `protobuf:"varint,2,opt,name=error,proto3,enum=connection.v1.ConnectionError,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -119,6 +169,13 @@ func (x *ConnectDeviceResponse) GetApproved() bool {
 	return false
 }
 
+func (x *ConnectDeviceResponse) GetError() ConnectionError {
+	if x != nil && x.Error != nil {
+		return *x.Error
+	}
+	return ConnectionError_CONNECTION_ERROR_UNKNOWN
+}
+
 var File_connection_v1_connected_devices_proto protoreflect.FileDescriptor
 
 const file_connection_v1_connected_devices_proto_rawDesc = "" +
@@ -127,9 +184,15 @@ const file_connection_v1_connected_devices_proto_rawDesc = "" +
 	"\x14ConnectDeviceRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\tR\bdeviceId\x12\x1d\n" +
 	"\n" +
-	"device_key\x18\x02 \x01(\tR\tdeviceKey\"3\n" +
+	"device_key\x18\x02 \x01(\tR\tdeviceKey\"x\n" +
 	"\x15ConnectDeviceResponse\x12\x1a\n" +
-	"\bapproved\x18\x01 \x01(\bR\bapprovedB3Z1github.com/ship-monitor/protocol/go/connection/v1b\x06proto3"
+	"\bapproved\x18\x01 \x01(\bR\bapproved\x129\n" +
+	"\x05error\x18\x02 \x01(\x0e2\x1e.connection.v1.ConnectionErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error*z\n" +
+	"\x0fConnectionError\x12\x1c\n" +
+	"\x18CONNECTION_ERROR_UNKNOWN\x10\x00\x12*\n" +
+	"&CONNECTION_ERROR_HUB_NOT_AUTHENTICATED\x10\x01\x12\x1d\n" +
+	"\x19CONNECTION_ERROR_INTERNAL\x10\x02B3Z1github.com/ship-monitor/protocol/go/connection/v1b\x06proto3"
 
 var (
 	file_connection_v1_connected_devices_proto_rawDescOnce sync.Once
@@ -143,17 +206,20 @@ func file_connection_v1_connected_devices_proto_rawDescGZIP() []byte {
 	return file_connection_v1_connected_devices_proto_rawDescData
 }
 
+var file_connection_v1_connected_devices_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_connection_v1_connected_devices_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_connection_v1_connected_devices_proto_goTypes = []any{
-	(*ConnectDeviceRequest)(nil),  // 0: connection.v1.ConnectDeviceRequest
-	(*ConnectDeviceResponse)(nil), // 1: connection.v1.ConnectDeviceResponse
+	(ConnectionError)(0),          // 0: connection.v1.ConnectionError
+	(*ConnectDeviceRequest)(nil),  // 1: connection.v1.ConnectDeviceRequest
+	(*ConnectDeviceResponse)(nil), // 2: connection.v1.ConnectDeviceResponse
 }
 var file_connection_v1_connected_devices_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: connection.v1.ConnectDeviceResponse.error:type_name -> connection.v1.ConnectionError
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_connection_v1_connected_devices_proto_init() }
@@ -161,18 +227,20 @@ func file_connection_v1_connected_devices_proto_init() {
 	if File_connection_v1_connected_devices_proto != nil {
 		return
 	}
+	file_connection_v1_connected_devices_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_connection_v1_connected_devices_proto_rawDesc), len(file_connection_v1_connected_devices_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_connection_v1_connected_devices_proto_goTypes,
 		DependencyIndexes: file_connection_v1_connected_devices_proto_depIdxs,
+		EnumInfos:         file_connection_v1_connected_devices_proto_enumTypes,
 		MessageInfos:      file_connection_v1_connected_devices_proto_msgTypes,
 	}.Build()
 	File_connection_v1_connected_devices_proto = out.File

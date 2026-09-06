@@ -1,7 +1,14 @@
 syntax = "proto3";
 
 package connection.v1;
+
 option go_package = "github.com/ship-monitor/protocol/go/connection/v1";
+
+enum ConnectionError {
+  CONNECTION_ERROR_UNKNOWN = 0;
+  CONNECTION_ERROR_HUB_NOT_AUTHENTICATED = 1;
+  CONNECTION_ERROR_INTERNAL = 2;
+}
 
 message ConnectDeviceRequest {
   string device_id = 1;
@@ -13,4 +20,5 @@ message ConnectDeviceRequest {
 
 message ConnectDeviceResponse {
   bool approved = 1;
+  optional ConnectionError error = 2;
 }
