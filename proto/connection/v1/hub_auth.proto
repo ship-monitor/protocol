@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package connection.v1;
+
+option go_package = "github.com/ship-monitor/protocol/go/connection/v1";
+
+message AuthData {
+  // Access token to put in `Authorization` header.
+  string access_token = 1;
+  // Refresh token to use in authentication refresh.
+  string refresh_token = 2;
+}
+
+message AuthenticateHubRequest {
+  // Hub identifier. It should be generated on hub.
+  string hub_id = 1;
+  string model = 2;
+}
+
+message AuthenticateHubResponse {
+  AuthData auth = 1;
+}
+
+message RefreshHubAuthRequest {
+  string refresh_token = 1;
+}
+message RefreshHubAuthResponse {
+  AuthData auth = 1;
+}
