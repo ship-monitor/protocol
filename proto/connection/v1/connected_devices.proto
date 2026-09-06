@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package connection.v1;
+option go_package = "github.com/ship-monitor/protocol/go/connection/v1";
+
+message ConnectDeviceRequest {
+  string device_id = 1;
+
+  // Device secret used for authentication.
+  // Every device must have secret from which it generates 30s last auth key, thats checked on cloud.
+  string device_key = 2;
+}
+
+message ConnectDeviceResponse {
+  bool approved = 1;
+}

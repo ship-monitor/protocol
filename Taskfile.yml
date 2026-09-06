@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: "3"
+
+tasks:
+  proto-compile:
+    desc: Compile protobuf
+    cmds:
+      - mkdir -p go
+      - |
+        protoc \
+          --proto_path=./proto \
+          --go-grpc_out=go \
+          --go-grpc_opt=paths=source_relative \
+          --go_out=go \
+          --go_opt=paths=source_relative \
+          -I ./proto/connection/v1 \
+          proto/connection/v1/*.proto
+    silent: true

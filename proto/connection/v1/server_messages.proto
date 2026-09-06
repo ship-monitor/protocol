@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package connection.v1;
+option go_package = "github.com/ship-monitor/protocol/go/connection/v1";
+
+// Specific only for v1.
+// Message for setting sensor configuration
+message SetSensorConfig {
+    string device_id = 1;
+
+    float min_temp = 2;
+    float max_temp = 3;
+}
+message RunCommand {
+  // Unique identifier to receive the result of the command
+  string id = 1;
+  // Command name
+  string command = 2;
+  // Arguments
+  map<string, string> args = 3;
+}
+
+// Message sent by the cloud to the hub.
+message ServerMessage {
+  oneof message {
+    RunCommand run_command = 1;
+  }
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package connection.v1;
+
+import "connection/v1/connected_devices.proto";
+import "connection/v1/messages.proto";
+import "connection/v1/server_messages.proto";
+
+option go_package = "github.com/ship-monitor/protocol/go/connection/v1";
+
+// Handles connections between the hub and the client.
+service ConnectionService {
+  // Connect establish connection on which hub and cloud will communicate.
+  rpc Connect(stream HubMessage) returns (stream ServerMessage);
+  // ConnectDeviceToMe requests the cloud to connect device to the hub.
+  rpc ConnectDeviceToHub(ConnectDeviceRequest) returns (ConnectDeviceResponse);
+}
