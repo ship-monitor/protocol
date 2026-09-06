@@ -21,6 +21,8 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	ConnectionService_Connect_FullMethodName            = "/connection.v1.ConnectionService/Connect"
 	ConnectionService_ConnectDeviceToHub_FullMethodName = "/connection.v1.ConnectionService/ConnectDeviceToHub"
+	ConnectionService_AuthenticateHub_FullMethodName    = "/connection.v1.ConnectionService/AuthenticateHub"
+	ConnectionService_RefreshHubAuth_FullMethodName     = "/connection.v1.ConnectionService/RefreshHubAuth"
 )
 
 // ConnectionServiceClient is the client API for ConnectionService service.
@@ -33,6 +35,10 @@ type ConnectionServiceClient interface {
 	Connect(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[HubMessage, ServerMessage], error)
 	// ConnectDeviceToMe requests the cloud to connect device to the hub.
 	ConnectDeviceToHub(ctx context.Context, in *ConnectDeviceRequest, opts ...grpc.CallOption) (*ConnectDeviceResponse, error)
+	// Authenticates hub on first time connect.
+	AuthenticateHub(ctx context.Context, in *AuthenticateHubRequest, opts ...grpc.CallOption) (*AuthenticateHubResponse, error)
+	// Refresh hub authentication.
+	RefreshHubAuth(ctx context.Context, in *RefreshHubAuthRequest, opts ...grpc.CallOption) (*RefreshHubAuthResponse, error)
 }
 
 type connectionServiceClient struct {
@@ -66,6 +72,26 @@ func (c *connectionServiceClient) ConnectDeviceToHub(ctx context.Context, in *Co
 	return out, nil
 }
 
+func (c *connectionServiceClient) AuthenticateHub(ctx context.Context, in *AuthenticateHubRequest, opts ...grpc.CallOption) (*AuthenticateHubResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AuthenticateHubResponse)
+	err := c.cc.Invoke(ctx, ConnectionService_AuthenticateHub_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *connectionServiceClient) RefreshHubAuth(ctx context.Context, in *RefreshHubAuthRequest, opts ...grpc.CallOption) (*RefreshHubAuthResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RefreshHubAuthResponse)
+	err := c.cc.Invoke(ctx, ConnectionService_RefreshHubAuth_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConnectionServiceServer is the server API for ConnectionService service.
 // All implementations must embed UnimplementedConnectionServiceServer
 // for forward compatibility.
@@ -76,6 +102,10 @@ type ConnectionServiceServer interface {
 	Connect(grpc.BidiStreamingServer[HubMessage, ServerMessage]) error
 	// ConnectDeviceToMe requests the cloud to connect device to the hub.
 	ConnectDeviceToHub(context.Context, *ConnectDeviceRequest) (*ConnectDeviceResponse, error)
+	// Authenticates hub on first time connect.
+	AuthenticateHub(context.Context, *AuthenticateHubRequest) (*AuthenticateHubResponse, error)
+	// Refresh hub authentication.
+	RefreshHubAuth(context.Context, *RefreshHubAuthRequest) (*RefreshHubAuthResponse, error)
 	mustEmbedUnimplementedConnectionServiceServer()
 }
 
@@ -91,6 +121,12 @@ func (UnimplementedConnectionServiceServer) Connect(grpc.BidiStreamingServer[Hub
 }
 func (UnimplementedConnectionServiceServer) ConnectDeviceToHub(context.Context, *ConnectDeviceRequest) (*ConnectDeviceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ConnectDeviceToHub not implemented")
+}
+func (UnimplementedConnectionServiceServer) AuthenticateHub(context.Context, *AuthenticateHubRequest) (*AuthenticateHubResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AuthenticateHub not implemented")
+}
+func (UnimplementedConnectionServiceServer) RefreshHubAuth(context.Context, *RefreshHubAuthRequest) (*RefreshHubAuthResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RefreshHubAuth not implemented")
 }
 func (UnimplementedConnectionServiceServer) mustEmbedUnimplementedConnectionServiceServer() {}
 func (UnimplementedConnectionServiceServer) testEmbeddedByValue()                           {}
@@ -138,6 +174,42 @@ func _ConnectionService_ConnectDeviceToHub_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ConnectionService_AuthenticateHub_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthenticateHubRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectionServiceServer).AuthenticateHub(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConnectionService_AuthenticateHub_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectionServiceServer).AuthenticateHub(ctx, req.(*AuthenticateHubRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ConnectionService_RefreshHubAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshHubAuthRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectionServiceServer).RefreshHubAuth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConnectionService_RefreshHubAuth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectionServiceServer).RefreshHubAuth(ctx, req.(*RefreshHubAuthRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ConnectionService_ServiceDesc is the grpc.ServiceDesc for ConnectionService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -148,6 +220,14 @@ var ConnectionService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ConnectDeviceToHub",
 			Handler:    _ConnectionService_ConnectDeviceToHub_Handler,
+		},
+		{
+			MethodName: "AuthenticateHub",
+			Handler:    _ConnectionService_AuthenticateHub_Handler,
+		},
+		{
+			MethodName: "RefreshHubAuth",
+			Handler:    _ConnectionService_RefreshHubAuth_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

@@ -1,9 +1,10 @@
 syntax = "proto3";
 
 package connection.v1;
-option go_package = "github.com/ship-monitor/protocol/go/connection/v1";
 
 import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/ship-monitor/protocol/go/connection/v1";
 
 message CommandResult {
   string id = 1;
@@ -11,20 +12,19 @@ message CommandResult {
 }
 
 message Telemetry {
-    string state = 1;
-    string device_id = 2;
-    google.protobuf.Timestamp timestamp = 3;
+  string state = 1;
+  string device_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
 
-    oneof value {
-        bool bool_value = 4;
-        string string_value = 5;
-        int64 int_value = 6;
-        float float_value = 7;
-    }
-
+  oneof value {
+    bool bool_value = 4;
+    string string_value = 5;
+    int64 int_value = 6;
+    float float_value = 7;
+  }
 }
 message Heartbeat {
-    uint64 uptime_seconds = 1;
+  uint64 uptime_seconds = 1;
 }
 
 // Message sent by the hub to the cloud.

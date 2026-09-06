@@ -2,6 +2,7 @@ syntax = "proto3";
 package connection.v1;
 
 import "connection/v1/connected_devices.proto";
+import "connection/v1/hub_auth.proto";
 import "connection/v1/messages.proto";
 import "connection/v1/server_messages.proto";
 
@@ -13,4 +14,8 @@ service ConnectionService {
   rpc Connect(stream HubMessage) returns (stream ServerMessage);
   // ConnectDeviceToMe requests the cloud to connect device to the hub.
   rpc ConnectDeviceToHub(ConnectDeviceRequest) returns (ConnectDeviceResponse);
+  // Authenticates hub on first time connect.
+  rpc AuthenticateHub(AuthenticateHubRequest) returns (AuthenticateHubResponse);
+  // Refresh hub authentication.
+  rpc RefreshHubAuth(RefreshHubAuthRequest) returns (RefreshHubAuthResponse);
 }

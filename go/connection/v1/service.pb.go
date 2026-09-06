@@ -24,24 +24,34 @@ var File_connection_v1_service_proto protoreflect.FileDescriptor
 
 const file_connection_v1_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1bconnection/v1/service.proto\x12\rconnection.v1\x1a%connection/v1/connected_devices.proto\x1a\x1cconnection/v1/messages.proto\x1a#connection/v1/server_messages.proto2\xbc\x01\n" +
+	"\x1bconnection/v1/service.proto\x12\rconnection.v1\x1a%connection/v1/connected_devices.proto\x1a\x1cconnection/v1/hub_auth.proto\x1a\x1cconnection/v1/messages.proto\x1a#connection/v1/server_messages.proto2\xfd\x02\n" +
 	"\x11ConnectionService\x12F\n" +
 	"\aConnect\x12\x19.connection.v1.HubMessage\x1a\x1c.connection.v1.ServerMessage(\x010\x01\x12_\n" +
-	"\x12ConnectDeviceToHub\x12#.connection.v1.ConnectDeviceRequest\x1a$.connection.v1.ConnectDeviceResponseB3Z1github.com/ship-monitor/protocol/go/connection/v1b\x06proto3"
+	"\x12ConnectDeviceToHub\x12#.connection.v1.ConnectDeviceRequest\x1a$.connection.v1.ConnectDeviceResponse\x12`\n" +
+	"\x0fAuthenticateHub\x12%.connection.v1.AuthenticateHubRequest\x1a&.connection.v1.AuthenticateHubResponse\x12]\n" +
+	"\x0eRefreshHubAuth\x12$.connection.v1.RefreshHubAuthRequest\x1a%.connection.v1.RefreshHubAuthResponseB3Z1github.com/ship-monitor/protocol/go/connection/v1b\x06proto3"
 
 var file_connection_v1_service_proto_goTypes = []any{
-	(*HubMessage)(nil),            // 0: connection.v1.HubMessage
-	(*ConnectDeviceRequest)(nil),  // 1: connection.v1.ConnectDeviceRequest
-	(*ServerMessage)(nil),         // 2: connection.v1.ServerMessage
-	(*ConnectDeviceResponse)(nil), // 3: connection.v1.ConnectDeviceResponse
+	(*HubMessage)(nil),              // 0: connection.v1.HubMessage
+	(*ConnectDeviceRequest)(nil),    // 1: connection.v1.ConnectDeviceRequest
+	(*AuthenticateHubRequest)(nil),  // 2: connection.v1.AuthenticateHubRequest
+	(*RefreshHubAuthRequest)(nil),   // 3: connection.v1.RefreshHubAuthRequest
+	(*ServerMessage)(nil),           // 4: connection.v1.ServerMessage
+	(*ConnectDeviceResponse)(nil),   // 5: connection.v1.ConnectDeviceResponse
+	(*AuthenticateHubResponse)(nil), // 6: connection.v1.AuthenticateHubResponse
+	(*RefreshHubAuthResponse)(nil),  // 7: connection.v1.RefreshHubAuthResponse
 }
 var file_connection_v1_service_proto_depIdxs = []int32{
 	0, // 0: connection.v1.ConnectionService.Connect:input_type -> connection.v1.HubMessage
 	1, // 1: connection.v1.ConnectionService.ConnectDeviceToHub:input_type -> connection.v1.ConnectDeviceRequest
-	2, // 2: connection.v1.ConnectionService.Connect:output_type -> connection.v1.ServerMessage
-	3, // 3: connection.v1.ConnectionService.ConnectDeviceToHub:output_type -> connection.v1.ConnectDeviceResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	2, // 2: connection.v1.ConnectionService.AuthenticateHub:input_type -> connection.v1.AuthenticateHubRequest
+	3, // 3: connection.v1.ConnectionService.RefreshHubAuth:input_type -> connection.v1.RefreshHubAuthRequest
+	4, // 4: connection.v1.ConnectionService.Connect:output_type -> connection.v1.ServerMessage
+	5, // 5: connection.v1.ConnectionService.ConnectDeviceToHub:output_type -> connection.v1.ConnectDeviceResponse
+	6, // 6: connection.v1.ConnectionService.AuthenticateHub:output_type -> connection.v1.AuthenticateHubResponse
+	7, // 7: connection.v1.ConnectionService.RefreshHubAuth:output_type -> connection.v1.RefreshHubAuthResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -53,6 +63,7 @@ func file_connection_v1_service_proto_init() {
 		return
 	}
 	file_connection_v1_connected_devices_proto_init()
+	file_connection_v1_hub_auth_proto_init()
 	file_connection_v1_messages_proto_init()
 	file_connection_v1_server_messages_proto_init()
 	type x struct{}
